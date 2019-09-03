@@ -1,6 +1,9 @@
 package com.chaochaogege.LibImpl.leetcode;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
 
 // https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/
 // 蛇形打印二叉树
@@ -9,42 +12,42 @@ public class Q103 {
         new Q103().zigzagLevelOrder(new TreeNode(1));
     }
 
-    public List<List<Integer>> zigzagLevelOrder(TreeNode root){
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
         List<List<Integer>> result = new ArrayList<>();
         if(root == null){
             return result;
         }
-        Deque<TreeNode> queues = new ArrayDeque<>();
-        queues.add(root);
+        Deque<TreeNode> array = new ArrayDeque<>();
         boolean fromLeftToRight = true;
-        while(!queues.isEmpty()) {
-            List<Integer> temp = new ArrayList<>();
-            int size = queues.size();
+        array.addLast(root);
+        while(!array.isEmpty()) {
+            int size = array.size();
+            List<Integer> tmp = new ArrayList<>();
             if(fromLeftToRight) {
-                for(int i = 0 ; i < size; i ++) {
-                    TreeNode node = queues.pollFirst();
-                    temp.add(node.val);
-                    if(node.left != null) {
-                        queues.addLast(node.left);
+                for( int i = 0 ; i < size ; i ++) {
+                    TreeNode node = array.pollLast();
+                    tmp.add(node.val);
+                    if(node.left != null){
+                        array.addFirst(node.left);
                     }
-                    if (node.right != null){
-                        queues.addLast(node.right);
+                    if(node.right != null){
+                        array.addFirst(node.right);
                     }
                 }
             }else{
-                for(int i = 0 ; i < size; i ++){
-                    TreeNode node = queues.pollLast();
-                    temp.add(node.val);
+                for( int i = 0 ; i < size; i ++) {
+                    TreeNode node = array.pollFirst();
+                    tmp.add(node.val);
                     if(node.right != null){
-                        queues.addFirst(node.right);
+                        array.addLast(node.right);
                     }
-                    if(node.left != null) {
-                        queues.addFirst(node.left);
+                    if(node.left != null){
+                        array.addLast(node.left);
                     }
                 }
             }
-            result.add(temp);
             fromLeftToRight = !fromLeftToRight;
+            result.add(tmp);
         }
         return result;
     }
